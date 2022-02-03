@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Prism.AppModel;
+using Prism.Behaviors;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Xamarin.Forms;
@@ -313,6 +314,38 @@ namespace Prism.Common
             if ((type == typeof(NavigationPage) || type == typeof(TabbedPage)) && element.BindingContext == null)
             {
                 element.BindingContext = element;
+            }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static void Configure( this Page page, IPageBehaviorFactory factory )
+        {
+            SetAutowireViewModel( page );
+            factory.ApplyPageBehaviors( page );
+
+            switch ( page )
+            {
+                case MultiPage<Page> multiPage:
+                    ConfigureChildren( multiPage.Children );
+                    break;
+
+                case MultiPage<ContentPage> multiContent:
+                    ConfigureChildren( multiContent.Children );
+                    break;
+            }
+
+            void ConfigureChildren<T>( IEnumerable<T> children ) where T : Page
+            {
+                foreach ( var child in children )
+                {
+                    SetAutowireViewModel( child );
+                    factory.ApplyPageBehaviors( child );
+                    if ( child is NavigationPage navPage && navPage.CurrentPage != null )
+                    {
+                        SetAutowireViewModel( navPage.CurrentPage );
+                        factory.ApplyPageBehaviors( navPage.CurrentPage );
+                    }
+                }
             }
         }
     }
