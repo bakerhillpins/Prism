@@ -109,18 +109,6 @@ namespace Prism.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CollectionView&apos;s ItemSource property is not empty. 
-        ///    This control is being associated with a region, but the control is already bound to something else. 
-        ///    If you did not explicitly set the control&apos;s ItemsSource property, this exception may be 
-        ///    caused by a change in the value of the inherited RegionManager attached property..
-        /// </summary>
-        internal static string CollectionViewHasItemsSourceException {
-            get {
-                return ResourceManager.GetString("CollectionViewHasItemsSourceException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to ContentView&apos;s Content property is not empty. 
         ///    This control is being associated with a region, but the control is already bound to something else. 
         ///    If you did not explicitly set the control&apos;s Content property, 
@@ -332,6 +320,30 @@ namespace Prism.Properties {
         internal static string ScrollViewHasContentException {
             get {
                 return ResourceManager.GetString("ScrollViewHasContentException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SelectableItemsView&apos;s ItemSource property is not empty. 
+        ///    This control is being associated with a region, but the control is already bound to something else. 
+        ///    If you did not explicitly set the control&apos;s ItemsSource property, this exception may be 
+        ///    caused by a change in the value of the inherited RegionManager attached property..
+        /// </summary>
+        internal static string SelectableItemsViewHasItemsSourceException {
+            get {
+                return ResourceManager.GetString("SelectableItemsViewHasItemsSourceException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SelectableItemsView&apos;s ItemTemplate property is not empty. 
+        ///    This control is being associated with a region, but the control is already bound to something else. 
+        ///    If you did not explicitly set the control&apos;s ItemTemplate property, this exception may be 
+        ///    caused by a change in the value of the inherited RegionManager attached property..
+        /// </summary>
+        internal static string SelectableItemsViewHasItemTemplateException {
+            get {
+                return ResourceManager.GetString("SelectableItemsViewHasItemTemplateException", resourceCulture);
             }
         }
         
