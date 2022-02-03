@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
@@ -320,7 +320,7 @@ namespace Prism.Regions
         /// Removes the specified view from the region.
         /// </summary>
         /// <param name="view">The view to remove.</param>
-        public void Remove(VisualElement view)
+        public virtual void Remove(VisualElement view)
         {
             var itemMetadata = GetItemMetadataOrThrow(view);
 
