@@ -123,13 +123,9 @@ namespace Prism
 
         private INavigationService CreateNavigationService(object view)
         {
-            if (view is Page page)
+            if (view is VisualElement visualElement && visualElement.TryGetParentPage(out var page))
             {
                 return Navigation.Xaml.Navigation.GetNavigationService(page);
-            }
-            else if (view is VisualElement visualElement && visualElement.TryGetParentPage(out var parent))
-            {
-                return Navigation.Xaml.Navigation.GetNavigationService(parent);
             }
 
             return Container.Resolve<INavigationService>();

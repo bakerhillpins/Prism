@@ -19,6 +19,7 @@ Prism.Forms.Regions helps you more easily design and build rich, flexible, and e
     <Compile Include="..\..\Wpf\Prism.Wpf\Regions\RegionMemberLifetimeAttribute.cs" Link="Regions\%(Filename)%(Extension)" />
     <Compile Include="..\..\Wpf\Prism.Wpf\Regions\ViewSortHintAttribute.cs" Link="Regions\%(Filename)%(Extension)" />
     <Compile Include="..\..\Wpf\Prism.Wpf\Regions\SyncActiveStateAttribute.cs" Link="Regions\%(Filename)%(Extension)" />
+    <Compile Include="..\Prism.Forms\Extensions\VisualElementExtensions.cs" Link="Extensions\VisualElementExtensions.cs" />
     <Compile Include="..\..\Wpf\Prism.Wpf\Regions\*Exception.cs" Link="Regions\%(Filename)%(Extension)" />
     <Compile Include="..\..\Wpf\Prism.Wpf\Regions\*Exception.Desktop.cs" Link="Regions\%(Filename)%(Extension)" />
     <Compile Include="..\..\Wpf\Prism.Wpf\Regions\Behaviors\*Exception.cs" Link="Regions\Behaviors\%(Filename)%(Extension)" />
