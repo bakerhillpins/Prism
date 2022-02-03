@@ -873,9 +873,8 @@ namespace Prism.Navigation
                 throw new NavigationException(NavigationException.NoPageIsRegistered, _page, innerException);
             }
 
-            PageUtilities.SetAutowireViewModel(page);
-            _pageBehaviorFactory.ApplyPageBehaviors(page);
-            ConfigurePages(page, segment);
+            page.Configure( _pageBehaviorFactory );
+            SetupPages(page, segment);
 
             return page;
         }
@@ -892,31 +891,20 @@ namespace Prism.Navigation
             return page;
         }
 
-        void ConfigurePages(Page page, string segment)
+        void SetupPages(Page page, string segment)
         {
             if (page is TabbedPage)
             {
-                ConfigureTabbedPage((TabbedPage)page, segment);
+                SetupTabbedPage((TabbedPage)page, segment);
             }
             else if (page is CarouselPage)
             {
-                ConfigureCarouselPage((CarouselPage)page, segment);
+                SetupCarouselPage((CarouselPage)page, segment);
             }
         }
 
-        void ConfigureTabbedPage(TabbedPage tabbedPage, string segment)
+        void SetupTabbedPage(TabbedPage tabbedPage, string segment)
         {
-            foreach (var child in tabbedPage.Children)
-            {
-                PageUtilities.SetAutowireViewModel(child);
-                _pageBehaviorFactory.ApplyPageBehaviors(child);
-                if (child is NavigationPage navPage)
-                {
-                    PageUtilities.SetAutowireViewModel(navPage.CurrentPage);
-                    _pageBehaviorFactory.ApplyPageBehaviors(navPage.CurrentPage);
-                }
-            }
-
             var parameters = UriParsingHelper.GetSegmentParameters(segment);
 
             var tabsToCreate = parameters.GetValues<string>(KnownNavigationParameters.CreateTab);
@@ -957,13 +945,8 @@ namespace Prism.Navigation
             TabbedPageSelectTab(tabbedPage, parameters);
         }
 
-        void ConfigureCarouselPage(CarouselPage carouselPage, string segment)
+        void SetupCarouselPage(CarouselPage carouselPage, string segment)
         {
-            foreach (var child in carouselPage.Children)
-            {
-                PageUtilities.SetAutowireViewModel(child);
-            }
-
             var parameters = UriParsingHelper.GetSegmentParameters(segment);
 
             CarouselPageSelectTab(carouselPage, parameters);
