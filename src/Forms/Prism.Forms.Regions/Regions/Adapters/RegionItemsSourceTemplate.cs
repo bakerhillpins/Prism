@@ -5,7 +5,7 @@ namespace Prism.Regions.Adapters
     // Implementation Note:
     // In discussing with PureWeen, it is best to provide a ContentView and provide a
     // simple Binding of the BindingContext to the Content property. The Xamarin.Forms
-    // Layout engine may reuse the template provided and change out change out the Binding
+    // Layout engine may reuse the template provided and change out the Binding
     // Context for memory optimization.
     internal class RegionItemsSourceTemplate : DataTemplate
     {
