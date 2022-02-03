@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using Prism.Behaviors;
+using Prism.Common;
 using Prism.Ioc;
 using Prism.Properties;
 using Prism.Regions.Behaviors;
@@ -133,6 +135,8 @@ namespace Prism.Regions.Adapters
                                      Page p and (ContentPage or NavigationPage) => p,
                                      _ => throw new NotSupportedException( "" )
                                  };
+
+                    toAdd.Configure( ContainerLocator.Current.Resolve<IPageBehaviorFactory>() );
 
                     regionTarget.Children.Insert( startIndex, (T)toAdd );
                 }
