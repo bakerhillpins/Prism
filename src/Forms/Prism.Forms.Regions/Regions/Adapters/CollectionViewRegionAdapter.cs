@@ -1,6 +1,5 @@
 ﻿using System;
 using Prism.Ioc;
-using Prism.Properties;
 using Prism.Regions.Behaviors;
 using Xamarin.Forms;
 
@@ -32,21 +31,30 @@ namespace Prism.Regions.Adapters
         /// <param name="regionTarget">The object to adapt.</param>
         protected override void Adapt(IRegion region, CollectionView regionTarget)
         {
-            if (region == null)
-                throw new ArgumentNullException(nameof(region));
+        }
+
+        /// <summary>
+        /// Attach new behaviors.
+        /// </summary>
+        /// <param name="region">The region being used.</param>
+        /// <param name="regionTarget">The object to adapt.</param>
+        /// <remarks>
+        /// This class attaches the base behaviors and also listens for changes in the
+        /// activity of the region or the control selection and keeps the in sync.
+        /// </remarks>
+        protected override void AttachBehaviors( IRegion region, CollectionView regionTarget )
+        {
+            if ( region == null )
+                throw new ArgumentNullException( nameof(region) );
 
             if (regionTarget == null)
                 throw new ArgumentNullException(nameof(regionTarget));
 
-            bool itemsSourceIsSet = regionTarget.ItemsSource != null || regionTarget.IsSet(ItemsView.ItemsSourceProperty);
+            // Add the behavior that syncs the items source items with the rest of the items
+            region.Behaviors.Add( SelectableItemsViewSourceSyncBehavior.BehaviorKey,
+                                  new SelectableItemsViewSourceSyncBehavior() { HostControl = regionTarget } );
 
-            if (itemsSourceIsSet)
-            {
-                throw new InvalidOperationException(Resources.CollectionViewHasItemsSourceException);
-            }
-
-            regionTarget.ItemsSource = region.Views;
-            regionTarget.ItemTemplate = new RegionItemsSourceTemplate();
+            base.AttachBehaviors( region, regionTarget );
         }
 
         /// <summary>

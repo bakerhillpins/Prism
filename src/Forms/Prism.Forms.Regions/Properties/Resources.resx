@@ -135,12 +135,6 @@
     If you did not explicitly set the control's ItemSource property, 
     this exception may be caused by a change in the value of the inherited RegionManager attached property.</value>
   </data>
-  <data name="CollectionViewHasItemsSourceException" xml:space="preserve">
-    <value>CollectionView's ItemSource property is not empty. 
-    This control is being associated with a region, but the control is already bound to something else. 
-    If you did not explicitly set the control's ItemsSource property, this exception may be 
-    caused by a change in the value of the inherited RegionManager attached property.</value>
-  </data>
   <data name="ContentViewHasContentException" xml:space="preserve">
     <value>ContentView's Content property is not empty. 
     This control is being associated with a region, but the control is already bound to something else. 
@@ -211,6 +205,18 @@
     This control is being associated with a region, but the control is already bound to something else. 
     If you did not explicitly set the control's Content property, 
     this exception may be caused by a change in the value of the inherited RegionManager attached property.</value>
+  </data>
+  <data name="SelectableItemsViewHasItemsSourceException" xml:space="preserve">
+    <value>SelectableItemsView's ItemSource property is not empty. 
+    This control is being associated with a region, but the control is already bound to something else. 
+    If you did not explicitly set the control's ItemsSource property, this exception may be 
+    caused by a change in the value of the inherited RegionManager attached property.</value>
+  </data>
+  <data name="SelectableItemsViewHasItemTemplateException" xml:space="preserve">
+    <value>SelectableItemsView's ItemTemplate property is not empty. 
+    This control is being associated with a region, but the control is already bound to something else. 
+    If you did not explicitly set the control's ItemTemplate property, this exception may be 
+    caused by a change in the value of the inherited RegionManager attached property.</value>
   </data>
   <data name="StringCannotBeNullOrEmpty" xml:space="preserve">
     <value>The provided String argument {0} must not be null or empty.</value>
