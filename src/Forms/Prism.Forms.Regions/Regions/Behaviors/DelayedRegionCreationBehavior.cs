@@ -113,7 +113,7 @@ namespace Prism.Regions.Behaviors
                 return;
             }
 
-            if (TargetElement.CheckForParentPage())
+            if (TargetElement.TryGetParentPage(out _))
             {
                 Detach();
 
@@ -149,7 +149,7 @@ namespace Prism.Regions.Behaviors
                 var regionAdapter = _regionAdapterMappings.GetMapping(targetElement.GetType());
                 var region = regionAdapter.Initialize(targetElement, regionName);
                 var cleanupBehavior = new RegionCleanupBehavior(region);
-                var page = targetElement.GetParentPage();
+                targetElement.TryGetParentPage(out Page page);
                 page.Behaviors.Add(cleanupBehavior);
                 if (region is INavigationServiceAware nsa)
                 {

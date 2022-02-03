@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Prism.Regions;
 using Prism.Regions.Adapters;
 using Prism.Regions.Behaviors;
@@ -33,6 +33,9 @@ namespace Prism.Ioc
                 regionAdapterMappings.RegisterDefaultMapping<Layout<View>, LayoutViewRegionAdapter>();
                 regionAdapterMappings.RegisterDefaultMapping<ScrollView, ScrollViewRegionAdapter>();
                 regionAdapterMappings.RegisterDefaultMapping<ContentView, ContentViewRegionAdapter>();
+                regionAdapterMappings.RegisterMapping<TabbedPage, MultiPageRegionAdapter<Page>>();
+                regionAdapterMappings.RegisterMapping<CarouselPage, MultiPageRegionAdapter<ContentPage>>();
+
                 return regionAdapterMappings;
             });
 

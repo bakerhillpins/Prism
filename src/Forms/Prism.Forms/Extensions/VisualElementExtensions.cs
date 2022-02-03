@@ -1,26 +1,32 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using Xamarin.Forms;
 
 namespace Prism.Extensions
 {
     internal static class VisualElementExtensions
     {
-        public static bool TryGetParentPage(this VisualElement element, out Page page)
+        public static Element GetRoot(this Element element)
         {
-            page = GetParentPage(element);
+            return element.Parent switch
+                   {
+                       null => element,
+                       _ => GetRoot(element.Parent)
+                   };
+        }
+
+        public static bool TryGetParentPage( this VisualElement visualElement, out Page page )
+        {
+            page = GetParentPage( visualElement );
             return page != null;
         }
 
-        private static Page GetParentPage(Element visualElement)
+        private static Page GetParentPage(Element element)
         {
-            switch (visualElement.Parent)
-            {
-                case Page page:
-                    return page;
-                case null:
-                    return null;
-                default:
-                    return GetParentPage(visualElement.Parent);
-            }
+            return element as Page ?? element.Parent switch
+                                      {
+                                          null => null,
+                                          _ => GetParentPage( element.Parent )
+                                      };
         }
     }
 }

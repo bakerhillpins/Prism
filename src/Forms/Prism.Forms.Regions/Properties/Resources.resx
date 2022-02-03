@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -164,6 +164,18 @@
   </data>
   <data name="MappingExistsException" xml:space="preserve">
     <value>Mapping with the given type is already registered: {0}.</value>
+  </data>
+  <data name="MultiPageHasItemsSourceException" xml:space="preserve">
+    <value>MultiPage&lt;T&gt;'s ItemSource property is not empty. 
+    This control is being associated with a region, but the control is already bound to something else. 
+    If you did not explicitly set the control's ItemSource property, 
+    this exception may be caused by a change in the value of the inherited RegionManager attached property.</value>
+  </data>
+  <data name="MultiPageHasItemTemplateException" xml:space="preserve">
+    <value>MultiPage&lt;T&gt;'s ItemTemplate property is not empty. 
+    This control is being associated with a region, but the control is already bound to something else. 
+    If you did not explicitly set the control's ItemTemplate property, this exception may be 
+    caused by a change in the value of the inherited RegionManager attached property.</value>
   </data>
   <data name="NavigationServiceHasNoRegion" xml:space="preserve">
     <value>Navigation cannot proceed until a region is set for the RegionNavigationService.</value>

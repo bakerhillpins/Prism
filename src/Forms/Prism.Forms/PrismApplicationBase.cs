@@ -123,13 +123,9 @@ namespace Prism
 
         private INavigationService CreateNavigationService(object view)
         {
-            if (view is Page page)
+            if (view is VisualElement visualElement && visualElement.TryGetParentPage(out var page))
             {
                 return Navigation.Xaml.Navigation.GetNavigationService(page);
-            }
-            else if (view is VisualElement visualElement && visualElement.TryGetParentPage(out var parent))
-            {
-                return Navigation.Xaml.Navigation.GetNavigationService(parent);
             }
 
             return Container.Resolve<INavigationService>();
@@ -152,6 +148,17 @@ namespace Prism
 
             _containerExtension.CreateScope();
             NavigationService = _containerExtension.Resolve<INavigationService>();
+
+            var shell = CreateShell();
+            if ( shell != null )
+            {
+                Navigation.Xaml.Navigation.GetNavigationService( shell );
+
+                IPageBehaviorFactory pageBehaviorFactory = _containerExtension.Resolve<IPageBehaviorFactory>();
+                shell.Configure( pageBehaviorFactory );
+
+                InitializeShell( shell );
+            }
 
             InitializeModules();
         }
@@ -204,6 +211,23 @@ namespace Prism
                 IModuleManager manager = Container.Resolve<IModuleManager>();
                 manager.Run();
             }
+        }
+
+        /// <summary>
+        /// Creates the shell or main page of the application.
+        /// </summary>
+        /// <returns>The shell of the application.</returns>
+        protected virtual Page CreateShell()
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Initializes the shell.
+        /// </summary>
+        protected virtual void InitializeShell( Page shell )
+        {
+            MainPage = shell;
         }
 
         /// <summary>
