@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Prism.Regions;
 using Prism.Regions.Adapters;
 using Prism.Regions.Behaviors;
@@ -42,6 +42,7 @@ namespace Prism.Ioc
             containerRegistry.RegisterSingleton<IRegionBehaviorFactory>(p =>
             {
                 var regionBehaviors = p.Resolve<RegionBehaviorFactory>();
+                configureBehaviors?.Invoke( regionBehaviors );
                 regionBehaviors.AddIfMissing<BindRegionContextToVisualElementBehavior>(BindRegionContextToVisualElementBehavior.BehaviorKey);
                 regionBehaviors.AddIfMissing<RegionActiveAwareBehavior>(RegionActiveAwareBehavior.BehaviorKey);
                 regionBehaviors.AddIfMissing<SyncRegionContextWithHostBehavior>(SyncRegionContextWithHostBehavior.BehaviorKey);
@@ -50,7 +51,6 @@ namespace Prism.Ioc
                 regionBehaviors.AddIfMissing<ClearChildViewsRegionBehavior>(ClearChildViewsRegionBehavior.BehaviorKey);
                 regionBehaviors.AddIfMissing<AutoPopulateRegionBehavior>(AutoPopulateRegionBehavior.BehaviorKey);
                 regionBehaviors.AddIfMissing<DestructibleRegionBehavior>(DestructibleRegionBehavior.BehaviorKey);
-                configureBehaviors?.Invoke(regionBehaviors);
                 return regionBehaviors;
             });
             containerRegistry.Register<IRegionNavigationJournalEntry, RegionNavigationJournalEntry>();
