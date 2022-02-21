@@ -43,6 +43,7 @@ namespace Prism.Ioc
             containerRegistry.RegisterSingleton<IRegionBehaviorFactory>(p =>
             {
                 var regionBehaviors = p.Resolve<RegionBehaviorFactory>();
+                configureBehaviors?.Invoke( regionBehaviors );
                 regionBehaviors.AddIfMissing<BindRegionContextToVisualElementBehavior>(BindRegionContextToVisualElementBehavior.BehaviorKey);
                 regionBehaviors.AddIfMissing<RegionActiveAwareBehavior>(RegionActiveAwareBehavior.BehaviorKey);
                 regionBehaviors.AddIfMissing<SyncRegionContextWithHostBehavior>(SyncRegionContextWithHostBehavior.BehaviorKey);
@@ -51,14 +52,12 @@ namespace Prism.Ioc
                 regionBehaviors.AddIfMissing<ClearChildViewsRegionBehavior>(ClearChildViewsRegionBehavior.BehaviorKey);
                 regionBehaviors.AddIfMissing<AutoPopulateRegionBehavior>(AutoPopulateRegionBehavior.BehaviorKey);
                 regionBehaviors.AddIfMissing<DestructibleRegionBehavior>(DestructibleRegionBehavior.BehaviorKey);
-                configureBehaviors?.Invoke(regionBehaviors);
                 return regionBehaviors;
             });
             containerRegistry.Register<IRegionNavigationJournalEntry, RegionNavigationJournalEntry>();
             containerRegistry.Register<IRegionNavigationJournal, RegionNavigationJournal>();
             containerRegistry.Register<IRegionNavigationService, RegionNavigationService>();
-            containerRegistry.RegisterManySingleton<RegionResolverOverrides>(typeof(IResolverOverridesHelper), typeof(IActiveRegionHelper));
-            return containerRegistry.RegisterSingleton<IRegionManager, RegionManager>();
+            return containerRegistry.RegisterManySingleton<RegionResolverOverrides>(typeof(IResolverOverridesHelper), typeof(IActiveRegionHelper));
         }
     }
 }

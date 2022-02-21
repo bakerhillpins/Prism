@@ -54,6 +54,16 @@ namespace Prism.Regions
             RegisterMapping(typeof(TControl), ContainerLocator.Container.Resolve<TAdapter>());
         }
 
+        internal void RegisterDefaultMapping<TControl, TAdapter>() where TAdapter : IRegionAdapter
+        {
+            var controlType = typeof(TControl);
+
+            if ( mappings.ContainsKey( controlType ) )
+                return;
+
+            RegisterMapping( controlType, ContainerLocator.Container.Resolve<TAdapter>() );
+        }
+
         /// <summary>
         /// Returns the adapter associated with the type provided.
         /// </summary>
