@@ -27,7 +27,7 @@ namespace Prism.Ioc
                 configureAdapters?.Invoke(regionAdapterMappings);
 
                 regionAdapterMappings.RegisterDefaultMapping<CarouselView, CarouselViewRegionAdapter>();
-                regionAdapterMappings.RegisterMapping<CollectionView, CollectionViewRegionAdapter>();
+                regionAdapterMappings.RegisterDefaultMapping<CollectionView, CollectionViewRegionAdapter>();
                 regionAdapterMappings.RegisterDefaultMapping<Layout<View>, LayoutViewRegionAdapter>();
                 regionAdapterMappings.RegisterDefaultMapping<ScrollView, ScrollViewRegionAdapter>();
                 regionAdapterMappings.RegisterDefaultMapping<ContentView, ContentViewRegionAdapter>();
