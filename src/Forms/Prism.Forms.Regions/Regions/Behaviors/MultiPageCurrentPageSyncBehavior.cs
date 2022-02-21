@@ -72,6 +72,7 @@ namespace Prism.Regions.Behaviors
         {
             this.hostControl.PropertyChanging += this.HostControlPropertyChanging;
             this.hostControl.CurrentPageChanged += this.HostControlCurrentPageChanged;
+            this.Region.ActiveViews.CollectionChanged += this.ActiveViews_CollectionChanged;
         }
 
         private void HostControlPropertyChanging(object sender, PropertyChangingEventArgs e)
@@ -95,20 +96,52 @@ namespace Prism.Regions.Behaviors
                 if (this.previousPage != null)
                 {
                     this.Region.ActiveViews
-                        .Where(v => v.BindingContext == this.previousPage.BindingContext)
-                        .ForEach(f => this.Region.Deactivate(f));
+                        .Where( v => v.BindingContext == this.previousPage.BindingContext )
+                        .ForEach( v => this.Region.Deactivate( v ) );
                 }
 
                 if (this.hostControl.CurrentPage != null)
                 {
-                    this.Region.Views
-                        .Where(v => v.BindingContext == this.hostControl.CurrentPage.BindingContext)
-                        .ForEach(f => this.Region.Activate(f));
+                    this.Region.ActiveViews
+                        .Where( v => v.BindingContext == this.hostControl.CurrentPage.BindingContext )
+                        .ForEach( v => this.Region.Activate( v ) );
                 }
             }
             finally
             {
                 this.updatingActiveViewsInHostControlCurrentPageChanged = false;
+            }
+        }
+
+        private void ActiveViews_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (this.updatingActiveViewsInHostControlCurrentPageChanged)
+            {
+                // If we are updating the ActiveViews collection in the HostControlSelectionChanged, that 
+                // means the user has set the SelectedItem or SelectedItems himself and we don't need to do that here now
+                return;
+            }
+
+            //BUG: Testing against BindingContext assumes that there is a different VM for each view.
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                Page activePage = e.NewItems[0] as Page ?? GetPage(e.NewItems[0] as VisualElement);
+
+                if (this.hostControl.CurrentPage != null
+                     && this.hostControl.CurrentPage != activePage )
+                {
+                    this.Region.Deactivate(
+                        this.Region.ActiveViews.First( v => v.BindingContext == this.hostControl.CurrentPage.BindingContext ) );
+                }
+
+                this.hostControl.CurrentPage = activePage;
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove &&
+                      e.OldItems
+                       .Cast<BindableObject>()
+                       .Any(v => v.BindingContext == this.hostControl.CurrentPage.BindingContext) )
+            {
+                this.hostControl.CurrentPage = null;
             }
         }
     }

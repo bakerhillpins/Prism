@@ -32,14 +32,9 @@ namespace Prism.Regions.Adapters
             _container = container;
         }
 
-
 #region Overrides of RegionAdapterBase<MultiPage<T>>
 
-        /// <summary>
-        /// Adapts a <see cref="MultiPage{T}"/> to an <see cref="IRegion"/>.
-        /// </summary>
-        /// <param name="region">The new region being used.</param>
-        /// <param name="regionTarget">The object to adapt.</param>
+        /// <inheritdoc />
         protected override void Adapt(IRegion region, MultiPage<T> regionTarget)
         {
             if (region == null)
@@ -71,15 +66,7 @@ namespace Prism.Regions.Adapters
                 (o, a) => this.Views_CollectionChanged(regionTarget, a);
         }
 
-        /// <summary>
-        /// Attach new behaviors.
-        /// </summary>
-        /// <param name="region">The region being used.</param>
-        /// <param name="regionTarget">The object to adapt.</param>
-        /// <remarks>
-        /// This class attaches the base behaviors and also listens for changes in the
-        /// activity of the region or the control selection and keeps the in sync.
-        /// </remarks>
+        /// <inheritdoc />
         protected override void AttachBehaviors(IRegion region, MultiPage<T> regionTarget)
         {
             // Add the behavior that syncs the CurrentPage with the ActiveView.
@@ -89,10 +76,7 @@ namespace Prism.Regions.Adapters
             base.AttachBehaviors(region, regionTarget);
         }
 
-        /// <summary>
-        /// Creates a new instance of <see cref="IRegion"/>.
-        /// </summary>
-        /// <returns>A new instance of <see cref="Region"/>.</returns>
+        /// <inheritdoc />
         protected override IRegion CreateRegion() =>
             _container.Resolve<SingleActiveRegion>();
 
