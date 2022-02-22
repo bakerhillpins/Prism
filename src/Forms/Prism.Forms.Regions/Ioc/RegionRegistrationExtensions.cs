@@ -35,6 +35,7 @@ namespace Prism.Ioc
                 regionAdapterMappings.RegisterDefaultMapping<ContentView, ContentViewRegionAdapter>();
                 regionAdapterMappings.RegisterDefaultMapping<TabbedPage, MultiPageRegionAdapter<Page>>();
                 regionAdapterMappings.RegisterDefaultMapping<CarouselPage, MultiPageRegionAdapter<ContentPage>>();
+                regionAdapterMappings.RegisterDefaultMapping<FlyoutPage, FlyoutPageRegionAdapter>();
 
                 return regionAdapterMappings;
             });
