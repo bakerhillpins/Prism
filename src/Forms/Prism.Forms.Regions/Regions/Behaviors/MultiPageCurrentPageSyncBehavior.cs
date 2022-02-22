@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using Prism.Common;
-using Prism.Properties;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
@@ -20,24 +17,6 @@ namespace Prism.Regions.Behaviors
     /// </summary>
     public class MultiPageCurrentPageSyncBehavior : RegionBehavior, IHostAwareRegionBehavior
     {
-        /// <summary>Identifies the Page bindable property.</summary>
-        /// <remarks>This is assigned to a View that has been wrapped in a <see cref="MultiPageChildTemplate"/> so that it
-        /// be displayed in a <see cref="MultiPage{T}"/> Region.</remarks>
-        public static readonly BindableProperty PageProperty =
-            BindableProperty.CreateAttached("Page", typeof(Page), typeof(MultiPageCurrentPageSyncBehavior), null);
-
-        /// <summary>Gets the page that's associated with the view that's contained in the region. This is a bindable property.</summary>
-        public static Page GetPage(BindableObject view)
-        {
-            return (Page)view.GetValue(PageProperty);
-        }
-
-        /// <summary>Sets the page that's associated with the view that's contained in the region. This is a bindable property.</summary>
-        public static void SetPage(BindableObject view, Page value)
-        {
-            view.SetValue(PageProperty, value);
-        }
-
         /// <summary>
         /// Name that identifies the SelectorItemsSourceSyncBehavior behavior in a collection of RegionsBehaviors. 
         /// </summary>
@@ -92,19 +71,19 @@ namespace Prism.Regions.Behaviors
                 // This is needed to prevent the ActiveViews_CollectionChanged() method from firing. 
                 this.updatingActiveViewsInHostControlCurrentPageChanged = true;
 
-                // check if the view is in both Views and ActiveViews collections (there may be out of sync)
-                if (this.previousPage != null)
-                {
-                    this.Region.ActiveViews
-                        .Where( v => v.BindingContext == this.previousPage.BindingContext )
-                        .ForEach( v => this.Region.Deactivate( v ) );
-                }
-
+                // Activate will automatically deactivate a SingleActiveRegion view.
                 if (this.hostControl.CurrentPage != null)
                 {
-                    this.Region.ActiveViews
-                        .Where( v => v.BindingContext == this.hostControl.CurrentPage.BindingContext )
+                    this.Region.Views
+                        .Where( v => v == this.hostControl.CurrentPage ||
+                                     v.Parent == this.hostControl.CurrentPage )
                         .ForEach( v => this.Region.Activate( v ) );
+                }
+                else if ( this.previousPage != null )
+                {
+                    this.Region.ActiveViews
+                        .Where( v => v == this.previousPage || v.Parent == this.previousPage )
+                        .ForEach( v => this.Region.Deactivate( v ) );
                 }
             }
             finally
@@ -122,26 +101,13 @@ namespace Prism.Regions.Behaviors
                 return;
             }
 
-            //BUG: Testing against BindingContext assumes that there is a different VM for each view.
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                Page activePage = e.NewItems[0] as Page ?? GetPage(e.NewItems[0] as VisualElement);
-
-                if (this.hostControl.CurrentPage != null
-                     && this.hostControl.CurrentPage != activePage )
-                {
-                    this.Region.Deactivate(
-                        this.Region.ActiveViews.First( v => v.BindingContext == this.hostControl.CurrentPage.BindingContext ) );
-                }
-
-                this.hostControl.CurrentPage = activePage;
-            }
-            else if (e.Action == NotifyCollectionChangedAction.Remove &&
-                      e.OldItems
-                       .Cast<BindableObject>()
-                       .Any(v => v.BindingContext == this.hostControl.CurrentPage.BindingContext) )
-            {
-                this.hostControl.CurrentPage = null;
+                this.hostControl.CurrentPage = e.NewItems[ 0 ] switch
+                                               {
+                                                   Page p => p,
+                                                   VisualElement ve => ve.Parent as Page
+                                               };
             }
         }
     }
@@ -160,8 +126,6 @@ namespace Prism.Regions.Behaviors
         public static ContentPage WrapInPage( View view )
         {
             ContentPage wrapper = (ContentPage)MultiPageChildTemplate.Instance.CreateContent();
-
-            MultiPageCurrentPageSyncBehavior.SetPage( view, wrapper );
 
             wrapper.Content = view;
 

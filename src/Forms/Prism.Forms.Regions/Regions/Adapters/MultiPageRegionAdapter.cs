@@ -19,7 +19,7 @@ namespace Prism.Regions.Adapters
     /// </summary>
     public class MultiPageRegionAdapter<T> : RegionAdapterBase<MultiPage<T>> where T : Page
     {
-        private IContainerProvider _container { get; }
+        private readonly IContainerProvider _container;
 
         /// <summary>
         /// Initializes a new instance of <see cref="MultiPageRegionAdapter{T}"/>.
@@ -129,7 +129,7 @@ namespace Prism.Regions.Adapters
             {
                 e.OldItems
                  .Cast<VisualElement>()
-                 .Select(o => o is Page p ? p : MultiPageCurrentPageSyncBehavior.GetPage(o))
+                 .Select(ve => ve is Page p ? p : ve.Parent)
                  .ForEach(p => regionTarget.Children.Remove((T)p));
             }
         }
