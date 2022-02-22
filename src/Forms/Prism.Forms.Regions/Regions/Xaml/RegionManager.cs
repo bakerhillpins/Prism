@@ -56,6 +56,12 @@ namespace Prism.Regions.Xaml
             BindableProperty.CreateAttached("RegionContext", typeof(object), typeof(RegionManager), null, propertyChanged: OnRegionContextChanged);
 
         /// <summary>
+        /// 
+        /// </summary>
+        public static readonly BindableProperty FlyoutRegionNameProperty =
+            BindableProperty.CreateAttached( "FlyoutRegionName", typeof(string), typeof(RegionManager), null);
+
+        /// <summary>
         /// Sets the <see cref="RegionNameProperty"/> attached property.
         /// </summary>
         /// <param name="regionTarget">The object to adapt. This is typically a container (i.e a control).</param>
@@ -80,6 +86,33 @@ namespace Prism.Regions.Xaml
                 throw new ArgumentNullException(nameof(regionTarget));
 
             return regionTarget.GetValue(RegionNameProperty) as string;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="RegionNameProperty"/> attached property.
+        /// </summary>
+        /// <param name="regionTarget">The object to adapt. This is typically a container (i.e a control).</param>
+        /// <param name="regionName">The name of the region to register.</param>
+        public static void SetFlyoutRegionName(VisualElement regionTarget, string regionName)
+        {
+            if (regionTarget == null)
+                throw new ArgumentNullException(nameof(regionTarget));
+
+            regionTarget.SetValue(FlyoutRegionNameProperty, regionName);
+        }
+
+        /// <summary>
+        /// Gets the value for the <see cref="RegionNameProperty"/> attached property.
+        /// </summary>
+        /// <param name="regionTarget">The object to adapt. This is typically a container (i.e a control).</param>
+        /// <returns>The name of the region that should be created when
+        /// <see cref="RegionManagerProperty"/> is also set in this element.</returns>
+        public static string GetFlyoutRegionName(VisualElement regionTarget)
+        {
+            if (regionTarget == null)
+                throw new ArgumentNullException(nameof(regionTarget));
+
+            return regionTarget.GetValue(FlyoutRegionNameProperty) as string;
         }
 
         /// <summary>
