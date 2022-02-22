@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -102,7 +102,7 @@ namespace Prism.Regions.Behaviors
 
                 if (this.hostControl.CurrentPage != null)
                 {
-                    this.Region.ActiveViews
+                    this.Region.Views
                         .Where( v => v.BindingContext == this.hostControl.CurrentPage.BindingContext )
                         .ForEach( v => this.Region.Activate( v ) );
                 }
