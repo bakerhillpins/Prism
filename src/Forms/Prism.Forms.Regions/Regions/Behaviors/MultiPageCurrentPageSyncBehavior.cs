@@ -71,20 +71,19 @@ namespace Prism.Regions.Behaviors
                 // This is needed to prevent the ActiveViews_CollectionChanged() method from firing. 
                 this.updatingActiveViewsInHostControlCurrentPageChanged = true;
 
-                // check if the view is in both Views and ActiveViews collections (there may be out of sync)
-                if (this.previousPage != null)
-                {
-                    this.Region.ActiveViews
-                        .Where( v => v == this.previousPage || v.Parent == this.previousPage )
-                        .ForEach( v => this.Region.Deactivate( v ) );
-                }
-
+                // Activate will automatically deactivate a SingleActiveRegion view.
                 if (this.hostControl.CurrentPage != null)
                 {
                     this.Region.Views
                         .Where( v => v == this.hostControl.CurrentPage ||
                                      v.Parent == this.hostControl.CurrentPage )
                         .ForEach( v => this.Region.Activate( v ) );
+                }
+                else if ( this.previousPage != null )
+                {
+                    this.Region.ActiveViews
+                        .Where( v => v == this.previousPage || v.Parent == this.previousPage )
+                        .ForEach( v => this.Region.Deactivate( v ) );
                 }
             }
             finally
@@ -104,28 +103,11 @@ namespace Prism.Regions.Behaviors
 
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                Page activePage = e.NewItems[ 0 ] switch
-                                  {
-                                      Page p => p,
-                                      VisualElement ve => ve.Parent as Page
-                                  };
-
-                if (this.hostControl.CurrentPage != null
-                    && this.hostControl.CurrentPage != activePage )
-                {
-                    this.Region.Deactivate(
-                        this.Region.ActiveViews.First( v => v == this.hostControl.CurrentPage ||
-                                                            v.Parent == this.hostControl.CurrentPage ) );
-                }
-
-                this.hostControl.CurrentPage = activePage;
-            }
-            else if (e.Action == NotifyCollectionChangedAction.Remove &&
-                      e.OldItems
-                       .Cast<VisualElement>()
-                       .Any(v => v == this.hostControl.CurrentPage || v.Parent == this.hostControl.CurrentPage ) )
-            {
-                this.hostControl.CurrentPage = null;
+                this.hostControl.CurrentPage = e.NewItems[ 0 ] switch
+                                               {
+                                                   Page p => p,
+                                                   VisualElement ve => ve.Parent as Page
+                                               };
             }
         }
     }
