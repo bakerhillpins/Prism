@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Linq;
 using Prism.Commands;
+using Prism.Common;
 using Prism.Navigation;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
@@ -107,7 +108,10 @@ namespace Prism.Regions.Behaviors
                                 path =>
                                 {
                                     Region.RegionManager.RequestNavigate( Region.Name, path );
-                                    hostControl.IsPresented = false;
+
+                                    MvvmHelpers.ViewAndViewModelAction<IFlyoutPageOptions>(
+                                        HostControl,
+                                        fpo => hostControl.IsPresented = fpo.IsPresentedAfterNavigation );
                                 } ),
                             CommandParameter =
                                 PageNavigationRegistry.GetPageNavigationInfo( newItem.GetType() ).Name
