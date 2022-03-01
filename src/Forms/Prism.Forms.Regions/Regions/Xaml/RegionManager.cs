@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Reflection;
 using Prism.Common;
@@ -59,7 +59,8 @@ namespace Prism.Regions.Xaml
         /// 
         /// </summary>
         public static readonly BindableProperty FlyoutRegionNameProperty =
-            BindableProperty.CreateAttached( "FlyoutRegionName", typeof(string), typeof(RegionManager), null);
+            BindableProperty.CreateAttached( "FlyoutRegionName", typeof(string), typeof(RegionManager), null,
+                                             propertyChanging: OnFlyoutRegionNameChanging);
 
         /// <summary>
         /// Sets the <see cref="RegionNameProperty"/> attached property.
@@ -152,6 +153,14 @@ namespace Prism.Regions.Xaml
             var regionCreationBehavior = container.Resolve<DelayedRegionCreationBehavior>();
             regionCreationBehavior.TargetElement = element;
             regionCreationBehavior.Attach();
+        }
+
+        private static void OnFlyoutRegionNameChanging(BindableObject bindable, object oldvalue, object newvalue)
+        {
+            if ( bindable is not FlyoutPage )
+            {
+                throw new InvalidOperationException( "Must be placed on FlyoutPage" );
+            }
         }
 
         /// <summary>
