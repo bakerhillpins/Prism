@@ -1,5 +1,4 @@
 ﻿using System;
-using Prism.Ioc;
 using Xamarin.Forms;
 
 namespace Prism.Regions
@@ -41,26 +40,7 @@ namespace Prism.Regions
             if (element == null)
                 throw new ArgumentNullException(nameof(element));
 
-            var regionManager = TryGetRegion(element);
-            if (regionManager is null)
-            {
-                regionManager = ContainerLocator.Container.Resolve<IRegionManager>();
-                element.SetValue(Xaml.RegionManager.RegionManagerProperty, regionManager);
-            }
-
-            return regionManager;
-        }
-
-        private IRegionManager TryGetRegion(VisualElement element)
-        {
-            try
-            {
-                return element.GetValue(Xaml.RegionManager.RegionManagerProperty) as IRegionManager;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            return element.GetValue( Xaml.RegionManager.RegionManagerProperty ) as IRegionManager;
         }
     }
 }

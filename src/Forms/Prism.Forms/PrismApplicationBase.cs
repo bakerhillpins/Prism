@@ -10,6 +10,7 @@ using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Mvvm;
 using Prism.Navigation;
+using Prism.Regions;
 using Prism.Services;
 using Prism.Services.Dialogs;
 using Xamarin.Forms;
@@ -153,6 +154,11 @@ namespace Prism
             if ( shell != null )
             {
                 Navigation.Xaml.Navigation.GetNavigationService( shell );
+                if ( Container.IsRegistered<IRegionInitializer>() )
+                {
+                    IRegionInitializer regionInitializer = _containerExtension.Resolve<IRegionInitializer>();
+                    regionInitializer.SetApplicationShell( shell );
+                }
 
                 IPageBehaviorFactory pageBehaviorFactory = _containerExtension.Resolve<IPageBehaviorFactory>();
                 shell.Configure( pageBehaviorFactory );
