@@ -138,7 +138,7 @@ namespace Prism.Regions.Behaviors
                     e.NewItems[ 0 ] switch
                     {
                         View v => v.Parent as Page ?? MultiPageChildTemplate.WrapInPage( v ),
-                        Page p and (ContentPage or NavigationPage) => p,
+                        Page p => p,
                         _ => throw new NotSupportedException( "" )
                     };
             }
