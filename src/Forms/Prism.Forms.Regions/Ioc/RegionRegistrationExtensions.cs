@@ -37,6 +37,7 @@ namespace Prism.Ioc
             });
 
             containerRegistry.RegisterSingleton<IRegionManager, RegionManager>();
+            containerRegistry.RegisterSingleton<IRegionInitializer, RegionInitializer>();
             containerRegistry.RegisterSingleton<IRegionNavigationContentLoader, RegionNavigationContentLoader>();
             containerRegistry.RegisterSingleton<IRegionViewRegistry, RegionViewRegistry>();
             containerRegistry.RegisterSingleton<IRegionBehaviorFactory>(p =>
