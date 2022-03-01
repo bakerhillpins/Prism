@@ -14,17 +14,17 @@ namespace Prism.Regions.Behaviors
         /// <summary>Identifies the Page bindable property.</summary>
         /// <remarks>This is assigned to a View that has been wrapped in a <see cref="FlyoutPageFlyoutMenuBehavior"/> so that it
         /// be displayed in a <see cref="MultiPage{T}"/> Region.</remarks>
-        public static readonly BindableProperty FlyoutMenuProperty =
+        private static readonly BindableProperty FlyoutMenuProperty =
             BindableProperty.CreateAttached("FlyoutMenu", typeof(VisualElement), typeof(FlyoutPageFlyoutMenuBehavior), null );
 
         /// <summary>Gets the page that's associated with the view that's contained in the region. This is a bindable property.</summary>
-        public static View GetFlyoutMenu( BindableObject view )
+        private static View GetFlyoutMenu( BindableObject view )
         {
             return (View)view.GetValue( FlyoutMenuProperty );
         }
 
         /// <summary>Sets the page that's associated with the view that's contained in the region. This is a bindable property.</summary>
-        public static void SetFlyoutMenu( BindableObject view, View value )
+        private static void SetFlyoutMenu( BindableObject view, View value )
         {
             view.SetValue( FlyoutMenuProperty, value );
         }
