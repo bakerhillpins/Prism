@@ -150,18 +150,20 @@ namespace Prism
             _containerExtension.CreateScope();
             NavigationService = _containerExtension.Resolve<INavigationService>();
 
+            //TODO: The old Navigation and the new Region paradigms do not merge at all
             var shell = CreateShell();
             if ( shell != null )
             {
                 Navigation.Xaml.Navigation.GetNavigationService( shell );
+
+                IPageBehaviorFactory pageBehaviorFactory = _containerExtension.Resolve<IPageBehaviorFactory>();
+                shell.Configure( pageBehaviorFactory );
+
                 if ( Container.IsRegistered<IRegionInitializer>() )
                 {
                     IRegionInitializer regionInitializer = _containerExtension.Resolve<IRegionInitializer>();
                     regionInitializer.SetApplicationShell( shell );
                 }
-
-                IPageBehaviorFactory pageBehaviorFactory = _containerExtension.Resolve<IPageBehaviorFactory>();
-                shell.Configure( pageBehaviorFactory );
 
                 InitializeShell( shell );
             }

@@ -1,4 +1,6 @@
-﻿using Prism.Ioc;
+﻿using Prism.Common;
+using Prism.Ioc;
+using Prism.Navigation;
 using Xamarin.Forms;
 
 namespace Prism.Regions
@@ -13,6 +15,8 @@ namespace Prism.Regions
         {
             Xaml.RegionManager.SetRegionManager( shell, ContainerLocator.Current.Resolve<IRegionManager>() );
             Xaml.RegionManager.UpdateRegions();
+
+            PageUtilities.OnInitializedAsync( shell, new NavigationParameters() );
         }
 
 #endregion

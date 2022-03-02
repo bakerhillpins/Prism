@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Prism.DI.Forms.Tests.Mocks.ViewModels;
+﻿using Prism.DI.Forms.Tests.Mocks.ViewModels;
 using Prism.DI.Forms.Tests.Mocks.Views;
 using Prism.Ioc;
 using Xunit;
@@ -17,14 +13,13 @@ namespace Prism.DI.Forms.Tests.Fixtures.Regions
         public RegionFixture(ITestOutputHelper testOutputHelper)
             : base(testOutputHelper)
         {
-            _app = new PrismApplicationMock(this);
+            _app = new PrismApplicationRegionMock<Issue2415Page>(this);
         }
 
+        //TODO: The old Navigation and the new Region paradigms do not merge at all. Revisit this Test.
         [Fact]
-        public async Task RegionWorksWhenContentViewIsTopChild()
+        public void RegionWorksWhenContentViewIsTopChild()
         {
-            var result = await _app.NavigationService.NavigateAsync("Issue2415Page");
-            Assert.Null(result.Exception);
             Assert.NotNull(_app.MainPage);
             Assert.IsType<Issue2415Page>(_app.MainPage);
 
@@ -37,7 +32,6 @@ namespace Prism.DI.Forms.Tests.Fixtures.Regions
         void IPlatformInitializer.RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterInstance(_testOutputHelper);
-            containerRegistry.RegisterRegionServices();
             containerRegistry.RegisterForNavigation<Issue2415Page, Issue2415PageViewModel>();
             containerRegistry.RegisterForRegionNavigation<Issue2415RegionView, Issue2415RegionViewModel>();
         }
