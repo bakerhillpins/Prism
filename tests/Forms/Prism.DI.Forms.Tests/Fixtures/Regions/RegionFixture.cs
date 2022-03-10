@@ -16,7 +16,6 @@ namespace Prism.DI.Forms.Tests.Fixtures.Regions
             _app = new PrismApplicationRegionMock<Issue2415Page>(this);
         }
 
-        //TODO: The old Navigation and the new Region paradigms do not merge at all. Revisit this Test.
         [Fact]
         public void RegionWorksWhenContentViewIsTopChild()
         {
