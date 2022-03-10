@@ -95,7 +95,7 @@ namespace Prism.Regions.Adapters
                              View v => MultiPageChildTemplate.WrapInPage( v ),
 
                              //BUG? CarouselPage only supports Content pages. Should this be flagged here?
-                             Page p and (ContentPage or NavigationPage) => p,
+                             Page p  => p,
                              _ => throw new NotSupportedException( "" )
                          } ) );
             }
@@ -116,7 +116,7 @@ namespace Prism.Regions.Adapters
                     Page toAdd = newItem switch
                                  {
                                      View v => MultiPageChildTemplate.WrapInPage( v ),
-                                     Page p and (ContentPage or NavigationPage) => p,
+                                     Page p  => p,
                                      _ => throw new NotSupportedException( "" )
                                  };
 
