@@ -51,6 +51,7 @@ namespace Prism.Ioc
                 regionBehaviors.AddIfMissing<ClearChildViewsRegionBehavior>(ClearChildViewsRegionBehavior.BehaviorKey);
                 regionBehaviors.AddIfMissing<AutoPopulateRegionBehavior>(AutoPopulateRegionBehavior.BehaviorKey);
                 regionBehaviors.AddIfMissing<DestructibleRegionBehavior>(DestructibleRegionBehavior.BehaviorKey);
+                regionBehaviors.AddIfMissing<InitializeViewRegionBehavior>( InitializeViewRegionBehavior.BehaviorKey );
                 configureBehaviors?.Invoke(regionBehaviors);
                 return regionBehaviors;
             });

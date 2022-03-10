@@ -750,6 +750,11 @@ namespace Prism.Navigation
             return true;
         }
 
+        internal static async Task DoNavigateAction( Page shell, Func<Task> navigationAction = null )
+        {
+            await DoNavigateAction( null, string.Empty, shell, null, navigationAction );
+        }
+
         protected static async Task DoNavigateAction(Page fromPage, string toSegment, Page toPage, INavigationParameters parameters, Func<Task> navigationAction = null, Action<INavigationParameters> onNavigationActionCompleted = null)
         {
             var segmentParameters = UriParsingHelper.GetSegmentParameters(toSegment, parameters);

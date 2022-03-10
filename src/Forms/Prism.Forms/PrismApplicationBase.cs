@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Prism.AppModel;
 using Prism.Behaviors;
 using Prism.Common;
@@ -154,7 +155,7 @@ namespace Prism
             _containerExtension.CreateScope();
             NavigationService = _containerExtension.Resolve<INavigationService>();
 
-            //TODO: The old Navigation and the new Region paradigms do not merge at all
+            //TODO: The old Navigation and the new Region Nav paradigms don't merge smoothly
             var shell = CreateShell();
             if ( shell != null )
             {
@@ -237,9 +238,14 @@ namespace Prism
         /// <summary>
         /// Initializes the shell.
         /// </summary>
-        protected virtual void InitializeShell( Page shell )
+        protected virtual async void InitializeShell( Page shell )
         {
-            MainPage = shell;
+            await PageNavigationService.DoNavigateAction(
+                shell, async () =>
+                       {
+                           Container.Resolve<IApplicationProvider>().MainPage = shell;
+                           await Task.CompletedTask;
+                       } );
         }
 
         /// <summary>
