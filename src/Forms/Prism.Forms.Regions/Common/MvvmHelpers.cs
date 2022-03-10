@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using Prism.Navigation;
 using Prism.Regions.Navigation;
 using Xamarin.Forms;
 
@@ -8,30 +9,35 @@ namespace Prism.Common
     {
         public static void AutowireViewModel(object view) => PageUtilities.SetAutowireViewModel((VisualElement)view);
 
-        public static void ViewAndViewModelAction<T>(object view, Action<T> action)
+        public static bool ViewAndViewModelAction<T>( object view, Action<T> action )
             where T : class
         {
-            if (view is T viewAsT)
-                action(viewAsT);
+            bool actionExecuted = false;
 
-            if (view is BindableObject bindable && bindable.BindingContext is T vmAsT)
+            if ( view is T viewAsT )
+            {
+                actionExecuted = true;
+                action(viewAsT);
+            }
+
+            if ( view is BindableObject { BindingContext: T vmAsT } )
+            {
+                actionExecuted = true;
                 action(vmAsT);
+            }
+
+            return actionExecuted;
         }
 
         public static T GetImplementerFromViewOrViewModel<T>(object view)
             where T : class
         {
-            if (view is T viewAsT)
-            {
-                return viewAsT;
-            }
-
-            if (view is VisualElement element && element.BindingContext is T vmAsT)
-            {
-                return vmAsT;
-            }
-
-            return null;
+            return view switch
+                   {
+                       T viewAsT => viewAsT,
+                       VisualElement { BindingContext: T vmAsT } => vmAsT,
+                       _ => null
+                   };
         }
 
         public static bool IsNavigationTarget(object view, INavigationContext navigationContext)
@@ -41,7 +47,7 @@ namespace Prism.Common
                 return viewAsRegionAware.IsNavigationTarget(navigationContext);
             }
 
-            if (view is BindableObject bindable && bindable.BindingContext is IRegionAware vmAsRegionAware)
+            if (view is BindableObject { BindingContext: IRegionAware vmAsRegionAware } )
             {
                 return vmAsRegionAware.IsNavigationTarget(navigationContext);
             }
@@ -57,12 +63,22 @@ namespace Prism.Common
 
         public static void OnNavigatedFrom(object view, INavigationContext navigationContext)
         {
-            ViewAndViewModelAction<IRegionAware>(view, x => x.OnNavigatedFrom(navigationContext));
+            if ( !ViewAndViewModelAction<IRegionAware>(
+                    view, x => x.OnNavigatedFrom( navigationContext ) ) )
+            {
+                ViewAndViewModelAction<INavigatedAware>(
+                    view, x => x.OnNavigatedFrom( navigationContext.Parameters ) );
+            }
         }
 
         public static void OnNavigatedTo(object view, INavigationContext navigationContext)
         {
-            ViewAndViewModelAction<IRegionAware>(view, x => x.OnNavigatedTo(navigationContext));
+            if ( !ViewAndViewModelAction<IRegionAware>(
+                    view, x => x.OnNavigatedTo( navigationContext ) ) )
+            {
+                ViewAndViewModelAction<INavigatedAware>(
+                    view, x => x.OnNavigatedTo( navigationContext.Parameters ) );
+            }
         }
     }
 }
